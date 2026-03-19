@@ -2,14 +2,14 @@
 
 # Prepare flux files for inject_sources.sh
 
-if [[ -z ${MYCODE} ]]
-then
-    echo "Error: The MYCODE variable is missing. Exiting."
-    exit 1
-fi
+# if [[ -z ${MYCODE} ]]
+# then
+#     echo "Error: The MYCODE variable is missing. Exiting."
+#     exit 1
+# fi
 
 # module load singularity
-echo "${SINGULARITY_BINDPATH}"
+# echo "${SINGULARITY_BINDPATH}"
 
 # Read input parameters
 if [[ $1 ]] && [[ $2 ]] && [[ $3 ]] && [[ $4 ]] && [[ $5 ]] && [[ $6 ]]; then

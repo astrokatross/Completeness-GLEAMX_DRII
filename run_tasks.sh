@@ -2,21 +2,20 @@
 
 # A simple helper script to string together the completeness tasks that need to be run.
 
-cluster=garrawarla
 nsrc=130000
-region=310,90,-90,30
+region=195,310,-90,30
 flux=-3,-0.5,0.1
 nfiles=6
 sep_min=5
-outdir=/astro/mwasci/kross/gleamx/GLEAMX_DRII/completeness_ims/
-imageset='GLEAMX_DRII_170-231MHz'
+outdir="/data/curtin_gleam/DR3/HerA/GX_DR4_HerA/completeness/"
+imageset='GX_DR4_HerA_170-231MHz'
 
-imageset_dir=/astro/mwasci/kross/gleamx/GLEAMX_DRII/completeness_ims/
+imageset_dir="/data/curtin_gleam/DR3/HerA/GX_DR4_HerA/completeness/"
 
 export GLEAMX="${outdir}"
-export MYCODE=/astro/mwasci/software/kross/Completeness-GLEAMX_DRII/
+export MYCODE=/data/curtin_gleam/sw/Completeness-GLEAMX_DRII
 export NCPUS=38
-export CONTAINER=/astro/mwasci/kross/GLEAM-X-pipeline/gleamx_container.img
+export CONTAINER=$GXCONTAINER
 
 set -x
 
@@ -35,7 +34,7 @@ fi
 mkdir "${GLEAMX}/input_images"
 
 # TODO: See how well this works with symlinks. Need to be sure the container can follow them.
-for suffix in "" "_bkg" "_rms" "_projpsf_psf"
+for suffix in "" "_bkg" "_rms" "_psf"
 do
     if [[ -e "${imageset_dir}/${imageset}${suffix}.fits" ]]
     then
@@ -65,7 +64,7 @@ then
 fi
 
 # We will be blocking until we are finished
-msg=($(sbatch \
+msg="sbatch \
     --array 1-$nfiles \
     --time 24:00:00 \
     --ntasks-per-node 1 \
@@ -80,29 +79,33 @@ msg=($(sbatch \
     "${GLEAMX}/fluxes" \
     4.0 \
     "${GLEAMX}/inject" \
-"${imageset}"))
+"${imageset}""
 
-jobid=${msg[3]}
+echo "Submit injecting sources via:" 
+
+echo "$msg"
+
+# jobid=${msg[3]}
 # echo "$msg"
-id=$(echo "$msg" | cut -d ' ' -f3)
+# id=$(echo "$msg" | cut -d ' ' -f3)
 
-msg=($(sbatch \
-    --time 1:00:00 \
-    --ntasks-per-node 1 \
-    --cpus-per-task $NCPUS \
-    --dependency "afterok:$jobid" \
-    --export ALL \
-    --mem 150G \
-    -o "${outdir}/cmp_map.o%A" \
-    -e "${outdir}/cmp_map.e%A" \
-    "$MYCODE"/make_cmp_map.sh \
-    "${GLEAMX}/source_pos/source_pos.txt" \
-    "${GLEAMX}/inject" \
-    "$flux" \
-    "${GLEAMX}/input_images/${imageset}_projpsf_psf.fits" \
-    "${region}" \
-    6 \
-"${GLEAMX}/results"))
+# msg=($(sbatch \
+#     --time 1:00:00 \
+#     --ntasks-per-node 1 \
+#     --cpus-per-task $NCPUS \
+#     --dependency "afterok:$jobid" \
+#     --export ALL \
+#     --mem 150G \
+#     -o "${outdir}/cmp_map.o%A" \
+#     -e "${outdir}/cmp_map.e%A" \
+#     "$MYCODE"/make_cmp_map.sh \
+#     "${GLEAMX}/source_pos/source_pos.txt" \
+#     "${GLEAMX}/inject" \
+#     "$flux" \
+#     "${GLEAMX}/input_images/${imageset}_projpsf_psf.fits" \
+#     "${region}" \
+#     6 \
+# "${GLEAMX}/results"))
 
-# echo "$msg"
+# # echo "$msg"
 set +x 
