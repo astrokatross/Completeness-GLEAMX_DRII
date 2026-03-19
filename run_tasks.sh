@@ -34,7 +34,7 @@ fi
 mkdir "${GLEAMX}/input_images"
 
 # TODO: See how well this works with symlinks. Need to be sure the container can follow them.
-for suffix in "" "_bkg" "_rms" "projpsf_psf"
+for suffix in "" "_bkg" "_rms" "_projpsf_psf"
 do
     if [[ -e "${imageset_dir}/${imageset}${suffix}.fits" ]]
     then
