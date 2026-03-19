@@ -62,6 +62,7 @@ then
     echo "Completeness simulation set up failed. Aborting."
     exit 1
 fi
+set +x 
 
 # We will be blocking until we are finished
 msg="sbatch \
@@ -108,4 +109,3 @@ echo "$msg"
 # "${GLEAMX}/results"))
 
 # # echo "$msg"
-set +x 
