@@ -2,21 +2,19 @@
 
 # Generate list of random RA and Dec positions in specified region of sky
 
-#SBATCH --account=mwasci
-#SBATCH --partition=workq
-#SBATCH --clusters=garrawarla
+#SBATCH --partition=curtin_gleam
 #SBATCH --nodes=1
-#SBATCH --output=/astro/mwasci/software/kross/GLEAM-X-pipeline/log_garrawarla/generate_pos.o%A
-#SBATCH --error=/astro/mwasci/software/kross/GLEAM-X-pipeline/log_garrawarla/generate_pos.e%A
+#SBATCH --output=/data/curtin_gleam/sw/Completeness-GLEAMX_DRII/logs/generate_pos.o%A
+#SBATCH --error=/data/curtin_gleam/sw/Completeness-GLEAMX_DRII/logs/generate_pos.e%A
 #SBATCH --export=all
 
 # echo "Reminder on this branch this is not needed. Exiting. "
 # exit 1
 set -x 
 module load singularity
-source /astro/mwasci/software/kross/GLEAM-X-pipeline/GLEAM-X-pipeline-garrawarla.profile
+source /data/curtin_gleam/sw/GLEAM-X-pipeline/GLEAM-X-pipeline-dug.profile
 # echo $SINGULARITY_BINDPATH
-export containerImage=/astro/mwasci/kross/GLEAM-X-pipeline/gleamx_container.img
+export containerImage=/data/curtin/sw/gleamx/containers//gleamx_tools_knl.img
 
 start_time=$(date +%s)
 
@@ -55,7 +53,7 @@ output_dir = $output_dir
 EOPAR
 
 # Run Python script to generate RA and Dec positions
-srun singularity exec -B "/astro/mwasci/software/kross/Completeness-GLEAMX_DRII/" $containerImage /astro/mwasci/software/kross/Completeness-GLEAMX_DRII/generate_pos.py --nsrc=$nsrc --region=$region --sep-min=$sep_min source_pos.txt
+singularity exec -B "/data/curtin_gleam/sw/Completeness-GLEAMX_DRII/" $containerImage /data/curtin_gleam/sw/Completeness-GLEAMX_DRII/generate_pos.py --nsrc=$nsrc --region=$region --sep-min=$sep_min source_pos.txt
 
 end_time=$(date +%s)
 duration=$(echo "$end_time-$start_time" | bc -l)
