@@ -76,7 +76,7 @@ msg="sbatch \
 --cpus-per-task 60 \
 --export ALL \
 --mem 150G \
---consrtaint=knl \
+--constraint=knl \
 -p curtin_gleam \
 -o "${MYCODE}/logs/inject_source_HydA.o%A_%a" \
 -e "${MYCODE}/logs/inject_source_HydA.e%A_%a" \
