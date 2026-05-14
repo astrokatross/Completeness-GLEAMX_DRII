@@ -45,7 +45,7 @@ mkdir "${GLEAMX}/input_images"
 #     fi
 # done
 
-msg=($(sbatch --time=06:00:00 --dependency --ntasks-per-node=1 $MYCODE/generate_pos.sh ${nsrc} ${region} 5 $GLEAMX/source_pos))
+msg=($(sbatch --time=06:00:00 --ntasks-per-node=1 $MYCODE/generate_pos.sh ${nsrc} ${region} 5 $GLEAMX/source_pos))
 jobid=${msg[3]}
 
 # "$MYCODE/generate_fluxes.sh" \
