@@ -17,7 +17,6 @@ export MYCODE=/data/curtin_gleam/sw/Completeness-GLEAMX_DRII
 export NCPUS=60
 export CONTAINER=$GXCONTAINER
 
-set -x
 
 if [[ -z ${MYCODE} ]]
 then
@@ -59,34 +58,34 @@ $nfiles \
 "$outdir/"
 
 
-# if [[ $? -ne 0 ]]
-# then
-#     echo "Completeness simulation set up failed. Aborting."
-#     exit 1
-# fi
+if [[ $? -ne 0 ]]
+then
+    echo "Completeness simulation set up failed. Aborting."
+    exit 1
+fi
 # set +x 
 
 # We will be blocking until we are finished
-# msg="sbatch \
-#     --array 1-$nfiles \
-#     --time 24:00:00 \
-#     --ntasks-per-node 1 \
-#     --cpus-per-task 38 \
-#     --export ALL \
-#     --mem 350G \
-#     -o "${outdir}/inject_source.o%A_%a" \
-#     -e "${outdir}/inject_source.e%A_%a" \
-#     "$MYCODE/inject_sources.sh" \
-#     "${GLEAMX}/input_images" \
-#     "${GLEAMX}/source_pos/source_pos.txt" \
-#     "${GLEAMX}/fluxes" \
-#     4.0 \
-#     "${GLEAMX}/inject" \
-# "${imageset}""
+msg="sbatch \
+    --array 1-$nfiles \
+    --time 24:00:00 \
+    --ntasks-per-node 1 \
+    --cpus-per-task 60 \
+    --export ALL \
+    --mem 150G \
+    -o "${MYCODE}/logs/inject_source_HydA.o%A_%a" \
+    -e "${MYCODE}/logs/inject_source_HydA.e%A_%a" \
+    "$MYCODE/inject_sources.sh" \
+    "${GLEAMX}/input_images" \
+    "${GLEAMX}/source_pos/source_pos.txt" \
+    "${GLEAMX}/fluxes" \
+    4.0 \
+    "${GLEAMX}/inject" \
+"${imageset}""
 
-# echo "Submit injecting sources via:" 
+echo "Submit injecting sources via:" 
 
-# echo "$msg"
+echo "$msg"
 
 # jobid=${msg[3]}
 # echo "$msg"
