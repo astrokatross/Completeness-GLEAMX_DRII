@@ -69,7 +69,7 @@ input_map="${input_map_dir}/${imageset_name}.fits" # Potentially this may miss d
 input_map_comp="${input_map_dir}/${imageset_name}_comp.fits"
 input_map_rms="${input_map_dir}/${imageset_name}_rms.fits"
 input_map_bkg="${input_map_dir}/${imageset_name}_bkg.fits"
-input_map_psf="${input_map_dir}/${imageset_name}_projpsf_psf.fits"
+input_map_psf="${input_map_dir}/${imageset_name}_psf.fits"
 
 for file in "${input_map}" "${input_map_rms}" "${input_map_bkg}" "${input_map_psf}" "${input_sources}"; do
     if [ ! -e "${file}" ]; then
