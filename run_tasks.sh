@@ -51,7 +51,12 @@ for suffix in "" "_bkg" "_rms" "_psf" "_comp"
 do
     if [[ -e "${imageset_dir}/${imageset}${suffix}.fits" ]]
     then
-        cp -v "${imageset_dir}/${imageset}${suffix}.fits" "${GLEAMX}/input_images"
+        if [[ -e "${GLEAMX}/input_images/${imageset}${suffix}.fits" ]]
+        then
+            echo "File ${GLEAMX}/input_images/${imageset}${suffix}.fits already exists. Skipping copying ${imageset_dir}/${imageset}${suffix}.fits. "
+        else
+            cp -v "${imageset_dir}/${imageset}${suffix}.fits" "${GLEAMX}/input_images"
+        fi
     else
         echo "Could not find ${imageset_dir}/${imageset}${suffix}.fits. Exiting. "
         return 1
