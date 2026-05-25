@@ -1,20 +1,34 @@
 #!/usr/bin/env bash
 
 # A simple helper script to string together the completeness tasks that need to be run.
-
-nsrc=98210
-region=100,195,-90,30
 flux=-3,-0.5,0.1
 nfiles=6
 sep_min=5
-outdir="/data/curtin_gleam/DR3/GX_DR4_HydA/completeness/"
-imageset='GX_DR4_HydA_170-231MHz'
+regstr="HerA"
 
-imageset_dir="/data/curtin_gleam/DR3/GX_DR4_HydA/completeness/"
-
+if [[ $regstr == "HydA" ]]
+then
+    region=100,195,-90,30
+    echo "Region set to Hydra A. Region string is ${regstr}. Region is ${region}"
+    outdir="/data/curtin_gleam/DR3/GX_DR4_${regstr}/completeness/"
+    imageset='GX_DR4_${regstr}_170-231MHz'
+    imageset_dir="/data/curtin_gleam/DR3/GX_DR4_${regstr}/completeness/"
+    nsrc=98210
+elif [[ $regstr == "HerA" ]]
+then
+    region=195,310,-90,30
+    echo "Region set to Hercules A. Region string is ${regstr}. Region is ${region}"
+    outdir="/data/curtin_gleam/DR3/${regstr}/GX_DR4_${regstr}/completeness/"
+    imageset='GX_DR4_${regstr}_170-231MHz'
+    imageset_dir="/data/curtin_gleam/DR3/${regstr}/GX_DR4_${regstr}/completeness/"
+    nsrc=120030
+else
+    echo "Region string ${regstr} not recognised. Exiting. "
+    return 1
+fi
 export GLEAMX="${outdir}"
 export MYCODE=/data/curtin_gleam/sw/Completeness-GLEAMX_DRII
-export NCPUS=60
+export NCPUS=38
 export CONTAINER=$GXCONTAINER
 
 
@@ -69,44 +83,45 @@ fi
 # set +x 
 
 # We will be blocking until we are finished
-# msg="sbatch \
-# --array 1-$nfiles \
-# --time 24:00:00 \
-# --ntasks-per-node 1 \
-# --cpus-per-task 60 \
-# --export ALL \
-# --mem 150G \
-# --constraint=knl \
-# -p curtin_gleam \
-# -o "${MYCODE}/logs/inject_source_HydA.o%A_%a" \
-# -e "${MYCODE}/logs/inject_source_HydA.e%A_%a" \
-# "$MYCODE/inject_sources.sh" \
-# "${GLEAMX}/input_images" \
-# "${GLEAMX}/source_pos/source_pos.txt" \
-# "${GLEAMX}/fluxes" \
-# 4.0 \
-# "${GLEAMX}/inject" \
-# "${imageset}""
+msg="sbatch \
+--array 1-$nfiles \
+--time 24:00:00 \
+--ntasks-per-node 1 \
+--cpus-per-task 38 \
+--export ALL \
+--mem 350G \
+--constraint=clx \
+-p curtin_gleam \
+-o "${MYCODE}/logs/inject_source_${regstr}.o%A_%a" \
+-e "${MYCODE}/logs/inject_source_${regstr}.e%A_%a" \
+"$MYCODE/inject_sources.sh" \
+"${GLEAMX}/input_images" \
+"${GLEAMX}/source_pos/source_pos.txt" \
+"${GLEAMX}/fluxes" \
+4.0 \
+"${GLEAMX}/inject" \
+"${imageset}" \
+"${GLEAMX}/completeness"
 
-# echo "Submit injecting sources via:" 
+echo "Submit injecting sources via:" 
 
-# echo "$msg"
+echo "$msg"
 
 # jobid=${msg[3]}
 # echo "$msg"
 # id=$(echo "$msg" | cut -d ' ' -f3)
 
 msg="sbatch \
---time 1:00:00 \
+--time 7:00:00 \
 --ntasks-per-node 1 \
 --cpus-per-task $NCPUS \
 --dependency "afterok:$jobid" \
 --export ALL \
 --mem 150G \
---constraint="knl" \
+--constraint="clx" \
 --partition="curtin_gleam" \
--o "${MYCODE}/logs/cmp_map_HydA.o%A" \
--e "${MYCODE}/logs/cmp_map_HydA.e%A" \
+-o "${MYCODE}/logs/cmp_map_${regstr}.o%A" \
+-e "${MYCODE}/logs/cmp_map_${regstr}.e%A" \
 "$MYCODE"/make_cmp_map.sh \
 "${GLEAMX}/source_pos/source_pos.txt" \
 "${GLEAMX}/inject" \
@@ -117,7 +132,7 @@ msg="sbatch \
 "${GLEAMX}/results""
 
 
-# echo "Submit injecting sources via:" 
+echo "Submit make final map via:" 
 
-# echo "$msg"
+echo "$msg"
 # echo "$msg"
