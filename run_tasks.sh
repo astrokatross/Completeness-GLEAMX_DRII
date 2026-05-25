@@ -101,7 +101,7 @@ msg="sbatch \
 4.0 \
 "${GLEAMX}/inject" \
 "${imageset}" \
-"${GLEAMX}/completeness"
+"${GLEAMX}/completeness""
 
 echo "Submit injecting sources via:" 
 
