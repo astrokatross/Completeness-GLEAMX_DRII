@@ -11,7 +11,7 @@ then
     region=100,195,-90,30
     echo "Region set to Hydra A. Region string is ${regstr}. Region is ${region}"
     outdir="/data/curtin_gleam/DR3/GX_DR4_${regstr}/completeness/"
-    imageset='GX_DR4_${regstr}_170-231MHz'
+    imageset="GX_DR4_${regstr}_170-231MHz"
     imageset_dir="/data/curtin_gleam/DR3/GX_DR4_${regstr}/completeness/"
     nsrc=98210
 elif [[ $regstr == "HerA" ]]
@@ -19,7 +19,7 @@ then
     region=195,310,-90,30
     echo "Region set to Hercules A. Region string is ${regstr}. Region is ${region}"
     outdir="/data/curtin_gleam/DR3/${regstr}/GX_DR4_${regstr}/completeness/"
-    imageset='GX_DR4_${regstr}_170-231MHz'
+    imageset="GX_DR4_${regstr}_170-231MHz"
     imageset_dir="/data/curtin_gleam/DR3/${regstr}/GX_DR4_${regstr}/completeness/"
     nsrc=120030
 else
