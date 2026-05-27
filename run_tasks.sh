@@ -22,6 +22,14 @@ then
     imageset="GX_DR4_${regstr}_170-231MHz"
     imageset_dir="/data/curtin_gleam/DR3/${regstr}/GX_DR4_${regstr}/completeness/"
     nsrc=120030
+elif [[ $regstr == "DRII" ]]
+then 
+    region=310,100,-90,30
+    echo "Region set to Hercules A. Region string is ${regstr}. Region is ${region}"
+    outdir="/data/curtin_gleam/DR3/GX_DRII/completeness/"
+    imageset="GLEAMX_DRII_170-231MHz"
+    imageset_dir="/data/curtin_gleam/DR3/GX_DRII/completeness/"
+    nsrc=130000
 else
     echo "Region string ${regstr} not recognised. Exiting. "
     return 1
